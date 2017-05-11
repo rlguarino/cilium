@@ -58,6 +58,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/kubernetes/pkg/registry/core/service/ipallocator"
+	log "github.com/Sirupsen/logrus"
 )
 
 // Daemon is the cilium daemon that is in charge of perform all necessary plumbing,

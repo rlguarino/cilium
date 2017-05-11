@@ -29,14 +29,13 @@ import (
 	"github.com/cilium/cilium/pkg/policy"
 
 	"github.com/braintree/manners"
-	"github.com/op/go-logging"
+	log "github.com/Sirupsen/logrus"
 	"github.com/spf13/viper"
 	"github.com/vulcand/oxy/forward"
 	"github.com/vulcand/route"
 )
 
 var (
-	log     = logging.MustGetLogger("cilium-proxy")
 	logFile *os.File
 	logBuf  *bufio.Writer
 )

@@ -25,6 +25,8 @@ import (
 	"github.com/cilium/cilium/pkg/u8proto"
 
 	"github.com/vulcand/route"
+
+	log "github.com/Sirupsen/logrus"
 )
 
 type AuxRule struct {

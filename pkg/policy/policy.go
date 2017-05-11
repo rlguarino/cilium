@@ -24,10 +24,7 @@ import (
 	"github.com/cilium/cilium/pkg/labels"
 
 	"github.com/op/go-logging"
-)
-
-var (
-	log = logging.MustGetLogger("cilium-policy")
+	log "github.com/Sirupsen/logrus"
 )
 
 // Privilege represents the privileges available to define for a policy node.

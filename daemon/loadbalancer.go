@@ -25,6 +25,7 @@ import (
 	"github.com/cilium/cilium/pkg/maps/lbmap"
 
 	"github.com/go-openapi/runtime/middleware"
+	log "github.com/Sirupsen/logrus"
 )
 
 // addSVC2BPFMap adds the given bpf service to the bpf maps. If addRevNAT is set, adds the

@@ -26,6 +26,7 @@ import (
 	"github.com/cilium/cilium/pkg/policy"
 
 	"github.com/go-openapi/runtime/middleware"
+	log "github.com/Sirupsen/logrus"
 )
 
 func (d *Daemon) lookupCiliumEndpoint(id uint16) *endpoint.Endpoint {

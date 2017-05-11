@@ -25,6 +25,7 @@ import (
 	"github.com/cilium/cilium/pkg/labels"
 
 	"github.com/spf13/cobra"
+	log "github.com/Sirupsen/logrus"
 )
 
 var (

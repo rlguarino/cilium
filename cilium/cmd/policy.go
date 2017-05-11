@@ -28,6 +28,7 @@ import (
 	"github.com/cilium/cilium/pkg/policy"
 
 	"github.com/spf13/cobra"
+	log "github.com/Sirupsen/logrus"
 )
 
 // policyCmd represents the policy command

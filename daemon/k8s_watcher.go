@@ -31,6 +31,7 @@ import (
 	"k8s.io/client-go/pkg/api/v1"
 	"k8s.io/client-go/pkg/apis/extensions/v1beta1"
 	"k8s.io/client-go/tools/cache"
+	log "github.com/Sirupsen/logrus"
 )
 
 const (

@@ -37,6 +37,7 @@ import (
 	ctx "golang.org/x/net/context"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	k8sDockerLbls "k8s.io/kubernetes/pkg/kubelet/types"
+	log "github.com/Sirupsen/logrus"
 )
 
 const (

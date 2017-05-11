@@ -27,6 +27,7 @@ import (
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/swag"
 	k8sAPI "k8s.io/kubernetes/pkg/api"
+	log "github.com/Sirupsen/logrus"
 )
 
 func (d *Daemon) AllocateIP(ip net.IP) *apierror.APIError {

@@ -26,6 +26,7 @@ import (
 
 	dockerAPI "github.com/docker/engine-api/client"
 	ctx "golang.org/x/net/context"
+	log "github.com/Sirupsen/logrus"
 )
 
 // SyncState syncs cilium state against the containers running in the host. dir is the

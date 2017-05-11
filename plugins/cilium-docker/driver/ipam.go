@@ -22,6 +22,7 @@ import (
 	"github.com/cilium/cilium/pkg/client"
 
 	"github.com/docker/libnetwork/ipams/remote/api"
+	log "github.com/Sirupsen/logrus"
 )
 
 const (

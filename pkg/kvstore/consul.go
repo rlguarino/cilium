@@ -27,6 +27,7 @@ import (
 	"github.com/cilium/cilium/pkg/policy"
 
 	consulAPI "github.com/hashicorp/consul/api"
+	log "github.com/Sirupsen/logrus"
 )
 
 var (

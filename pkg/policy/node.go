@@ -22,6 +22,8 @@ import (
 
 	"github.com/cilium/cilium/pkg/labels"
 	"github.com/cilium/cilium/pkg/policy/api"
+
+	log "github.com/Sirupsen/logrus"
 )
 
 // Node to define hierarchy of rules

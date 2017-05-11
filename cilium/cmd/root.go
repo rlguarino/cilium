@@ -18,18 +18,16 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/cilium/cilium/common"
 	clientPkg "github.com/cilium/cilium/pkg/client"
 
-	l "github.com/op/go-logging"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"github.com/cilium/cilium/common/logging"
 )
 
 var (
 	cfgFile string
 	client  *clientPkg.Client
-	log     = l.MustGetLogger("cilium")
 )
 
 const (
@@ -97,10 +95,13 @@ func initConfig() {
 		fmt.Println("Using config file:", viper.ConfigFileUsed())
 	}
 
+	logging.SetupFormatter()
+
+	//TODO - need a way to send this to all logging endpoints that were configured with the daemon. Currently this just sends to syslog.
 	if viper.GetBool("debug") {
-		common.SetupLOG(log, "DEBUG")
+		logging.SetupLogging([]string{"syslog"}, map[string]string{"syslog.level" : "debug"}, "cilium-cmd")
 	} else {
-		common.SetupLOG(log, "INFO")
+		logging.SetupLogging([]string{"syslog"}, map[string]string{"syslog.level" : "info"}, "cilium-cmd")
 	}
 
 	if cl, err := clientPkg.NewClient(viper.GetString("host")); err != nil {

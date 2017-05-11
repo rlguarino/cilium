@@ -30,6 +30,7 @@ import (
 	"github.com/cilium/cilium/api/v1/server"
 	"github.com/cilium/cilium/api/v1/server/restapi"
 	"github.com/cilium/cilium/common"
+	"github.com/cilium/cilium/common/logging"
 	"github.com/cilium/cilium/common/addressing"
 	"github.com/cilium/cilium/daemon/defaults"
 	"github.com/cilium/cilium/daemon/options"
@@ -39,11 +40,11 @@ import (
 	"github.com/cilium/cilium/pkg/labels"
 	"github.com/cilium/cilium/pkg/version"
 
+	log "github.com/Sirupsen/logrus"
 	etcdAPI "github.com/coreos/etcd/clientv3"
 	"github.com/go-openapi/loads"
 	consulAPI "github.com/hashicorp/consul/api"
 	flags "github.com/jessevdk/go-flags"
-	logging "github.com/op/go-logging"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -60,7 +61,6 @@ const (
 
 var (
 	config = NewConfig()
-	log    = logging.MustGetLogger("cilium")
 
 	// Arguments variables keep in alphabetical order
 	bpfRoot            string
@@ -76,11 +76,16 @@ var (
 	labelPrefixFile    string
 	logstashAddr       string
 	logstashProbeTimer uint32
+	loggers            []string
 	nat46prefix        string
 	socketPath         string
 	v4Prefix           string
 	v6Address          string
+
+	foo string
 )
+
+var logOpts map[string]string = make(map[string]string)
 
 var cfgFile string
 
@@ -259,7 +264,14 @@ func init() {
 	flags.StringVar(&bpfRoot, "bpf-root", "", "Path to mounted BPF filesystem")
 	flags.String("access-log", "", "Path to access log of all HTTP requests observed")
 	flags.Bool("version", false, "Print version information")
+
+
+	//logOpts = make(map[string]string)
+	flags.StringSliceVar(&loggers, "log-driver", []string{}, "logging endpoints to use")
+	flags.Var(common.NewNamedMapOpts("log-opts", &logOpts, nil), "log-opt", "log driver options for cilium")
+	//flags.StringVar(&foo, "log-opt", "foo", "bar")
 	viper.BindPFlags(flags)
+
 }
 
 // RestoreExecPermissions restores file permissions to 0740 of all files inside
@@ -306,12 +318,6 @@ func initConfig() {
 		fmt.Println("Using config file:", viper.ConfigFileUsed())
 	}
 
-	if viper.GetBool("debug") {
-		common.SetupLOG(log, "DEBUG")
-	} else {
-		common.SetupLOG(log, "INFO")
-	}
-
 	// The cilium-agent must be run as root user.
 	if os.Getuid() != 0 {
 		fmt.Fprintf(os.Stderr, "Please run the cilium-agent with root privileges.\n")
@@ -354,6 +360,9 @@ func initConfig() {
 }
 
 func initEnv() {
+	logging.SetupFormatter()
+	logging.SetupLogging(loggers, logOpts, "cilium-agent")
+
 	socketDir := path.Dir(socketPath)
 	if err := os.MkdirAll(socketDir, defaults.RuntimePathRights); err != nil {
 		log.Fatalf("Cannot mkdir directory %q for cilium socket: %s", socketDir, err)
