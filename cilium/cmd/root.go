@@ -18,8 +18,8 @@ import (
 	"fmt"
 	"os"
 
-	clientPkg "github.com/cilium/cilium/pkg/client"
 	"github.com/cilium/cilium/common/logging"
+	clientPkg "github.com/cilium/cilium/pkg/client"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"

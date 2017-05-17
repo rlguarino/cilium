@@ -15,12 +15,12 @@
 package main
 
 import (
-	"os"
 	"fmt"
+	"os"
 	"path"
 
-	"github.com/cilium/cilium/plugins/cilium-docker/driver"
 	"github.com/cilium/cilium/common/logging"
+	"github.com/cilium/cilium/plugins/cilium-docker/driver"
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -78,9 +78,9 @@ func init() {
 func initConfig() {
 	logging.SetupFormatter()
 	if debug {
-		logging.SetupLogging([]string{"syslog"}, map[string]string{"syslog.level" : "debug"}, "cilium-docker")
+		logging.SetupLogging([]string{"syslog"}, map[string]string{"syslog.level": "debug"}, "cilium-docker")
 	} else {
-		logging.SetupLogging([]string{"syslog"}, map[string]string{"syslog.level" : "info"}, "cilium-docker")
+		logging.SetupLogging([]string{"syslog"}, map[string]string{"syslog.level": "info"}, "cilium-docker")
 	}
 
 	// The cilium-docker plugin must be run as root user.
