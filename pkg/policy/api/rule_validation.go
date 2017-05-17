@@ -16,6 +16,7 @@ package api
 
 import (
 	"fmt"
+	"net"
 	"strconv"
 )
 
@@ -43,6 +44,11 @@ func (i IngressRule) Validate() error {
 			return err
 		}
 	}
+	for _, p := range i.FromCIDR {
+		if err := p.Validate(); err != nil {
+			return err
+		}
+	}
 
 	return nil
 }
@@ -50,6 +56,11 @@ func (i IngressRule) Validate() error {
 // Validate validates an egress policy rule
 func (e EgressRule) Validate() error {
 	for _, p := range e.ToPorts {
+		if err := p.Validate(); err != nil {
+			return err
+		}
+	}
+	for _, p := range e.ToCIDR {
 		if err := p.Validate(); err != nil {
 			return err
 		}
@@ -90,5 +101,27 @@ func (pp PortProtocol) Validate() error {
 			pp.Protocol)
 	}
 
+	return nil
+}
+
+// Validate CIDR
+func (cidr CIDR) Validate() error {
+	if cidr.IP == "" {
+		return fmt.Errorf("IP must be specified")
+	}
+
+	_, ipnet, err := net.ParseCIDR(cidr.IP)
+	if err != nil {
+		return fmt.Errorf("Unable to parse CIDR: %s", err)
+	}
+
+	// Returns the prefix length as zero if the mask is not continuous.
+	ones, _ := ipnet.Mask.Size()
+	if ones == 0 {
+		return fmt.Errorf("Mask length can not be zero.")
+	}
+
+	// Verify that unmasked portion of the address is all zeroes?
+	
 	return nil
 }

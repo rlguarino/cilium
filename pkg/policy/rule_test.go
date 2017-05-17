@@ -146,3 +146,56 @@ func (ds *PolicyTestSuite) TestL4Policy(c *C) {
 	c.Assert(rule1.resolveL4Policy(toFoo, &state, NewL4Policy()), IsNil)
 	c.Assert(state.selectedRules, Equals, 0)
 }
+
+func (ds *PolicyTestSuite) TestCIDRPolicy(c *C) {
+	apiRule1 := api.Rule{
+		EndpointSelector: api.EndpointSelector{labels.ParseLabel("bar")},
+		Ingress: []api.IngressRule{
+			{
+				FromCIDR: []api.CIDR{
+					{IP: "10.0.1.0/24"},
+					{IP: "2001:db8::/48"},
+				},
+			},
+		},
+		Egress: []api.EgressRule{
+			{
+				ToCIDR: []api.CIDR{
+					{IP: "10.0.1.0/24"},
+					{IP: "2001:db8::/48"},
+				},
+			},
+		},
+	}
+
+	err := apiRule1.Validate()
+	c.Assert(err, IsNil)
+
+	rule1 := &rule{apiRule1}
+	err = rule1.validate()
+	c.Assert(err, IsNil)
+
+	// Must be parsable
+	err = api.Rule{
+		Ingress: []api.IngressRule{{
+			FromCIDR: []api.CIDR{{IP: "10.0.1..0/24"}},
+		}},
+	}.Validate()
+	c.Assert(err, Not(IsNil))
+
+	// Must have a mask
+	err = api.Rule{
+		Ingress: []api.IngressRule{{
+			FromCIDR: []api.CIDR{{IP: "10.0.1.0/0"}},
+		}},
+	}.Validate()
+	c.Assert(err, Not(IsNil))
+
+	// Prefix length must be in range for the address
+	err = api.Rule{
+		Ingress: []api.IngressRule{{
+			FromCIDR: []api.CIDR{{IP: "10.0.1.0/34"}},
+		}},
+	}.Validate()
+	c.Assert(err, Not(IsNil))
+}
