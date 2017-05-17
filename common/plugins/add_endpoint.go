@@ -32,7 +32,7 @@ const (
 )
 
 var (
-	//log = logging.MustGetLogger("cilium-net")
+//log = logging.MustGetLogger("cilium-net")
 )
 
 // Endpoint2IfName returns the host interface name for the given endpointID.

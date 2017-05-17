@@ -16,18 +16,18 @@ package logging
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log/syslog"
 	"net"
+	"os"
 	"strconv"
 	"strings"
+	"time"
 
+	"github.com/Sirupsen/logrus"
+	"github.com/Sirupsen/logrus/hooks/syslog"
 	"github.com/bshuster-repo/logrus-logstash-hook"
 	"github.com/evalphobia/logrus_fluent"
-	"github.com/Sirupsen/logrus"
-	"os"
-	"time"
-	"io/ioutil"
-	"github.com/Sirupsen/logrus/hooks/syslog"
 )
 
 // syslogOpts is the set of supported options for syslog configuration.
@@ -44,8 +44,8 @@ var fluentDOpts map[string]bool = map[string]bool{
 
 // logstashOpts is the set of supported options for logstash configuration.
 var logstashOpts map[string]bool = map[string]bool{
-	"logstash.address": true,
-	"logstash.level":   true,
+	"logstash.address":  true,
+	"logstash.level":    true,
 	"logstash.protocol": true,
 }
 
@@ -108,15 +108,15 @@ func SetupLogging(loggers []string, logOpts map[string]string, tag string) error
 			setupFluentD(valuesToValidate)
 			//TODO - need to finish logstash integration.
 		/*case "logstash":
-			fmt.Printf("SetupLogging: in logstash case\n")
-			err := validateOpts(logger, valuesToValidate, logstashOpts)
-			fmt.Printf("SetupLogging: validating options for logstash complete\n")
-			if err != nil {
-				fmt.Printf("SetupLogging: error validating logstash opts %v\n", err.Error())
-				return err
-			}
-			fmt.Printf("SetupLogging: about to setup logstash\n")
-			setupLogstash(valuesToValidate)
+		fmt.Printf("SetupLogging: in logstash case\n")
+		err := validateOpts(logger, valuesToValidate, logstashOpts)
+		fmt.Printf("SetupLogging: validating options for logstash complete\n")
+		if err != nil {
+			fmt.Printf("SetupLogging: error validating logstash opts %v\n", err.Error())
+			return err
+		}
+		fmt.Printf("SetupLogging: about to setup logstash\n")
+		setupLogstash(valuesToValidate)
 		*/
 		default:
 			return fmt.Errorf("provided log driver %q is not a supported log driver", logger)

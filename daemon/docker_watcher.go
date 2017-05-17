@@ -31,13 +31,13 @@ import (
 	"github.com/cilium/cilium/pkg/labels"
 	"github.com/cilium/cilium/pkg/policy"
 
+	log "github.com/Sirupsen/logrus"
 	dTypes "github.com/docker/engine-api/types"
 	dTypesEvents "github.com/docker/engine-api/types/events"
 	dNetwork "github.com/docker/engine-api/types/network"
 	ctx "golang.org/x/net/context"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	k8sDockerLbls "k8s.io/kubernetes/pkg/kubelet/types"
-	log "github.com/Sirupsen/logrus"
 )
 
 const (

@@ -30,8 +30,8 @@ import (
 	"github.com/cilium/cilium/api/v1/server"
 	"github.com/cilium/cilium/api/v1/server/restapi"
 	"github.com/cilium/cilium/common"
-	"github.com/cilium/cilium/common/logging"
 	"github.com/cilium/cilium/common/addressing"
+	"github.com/cilium/cilium/common/logging"
 	"github.com/cilium/cilium/daemon/defaults"
 	"github.com/cilium/cilium/daemon/options"
 	"github.com/cilium/cilium/pkg/bpf"
@@ -264,7 +264,6 @@ func init() {
 	flags.StringVar(&bpfRoot, "bpf-root", "", "Path to mounted BPF filesystem")
 	flags.String("access-log", "", "Path to access log of all HTTP requests observed")
 	flags.Bool("version", false, "Print version information")
-
 
 	//logOpts = make(map[string]string)
 	flags.StringSliceVar(&loggers, "log-driver", []string{}, "logging endpoints to use")

@@ -29,19 +29,18 @@ import (
 	"github.com/cilium/cilium/pkg/client"
 	"github.com/cilium/cilium/pkg/endpoint"
 
+	log "github.com/Sirupsen/logrus"
+	"github.com/cilium/cilium/common/logging"
 	"github.com/containernetworking/cni/pkg/ns"
 	"github.com/containernetworking/cni/pkg/skel"
 	cniTypes "github.com/containernetworking/cni/pkg/types"
 	cniTypesVer "github.com/containernetworking/cni/pkg/types/current"
 	"github.com/containernetworking/cni/pkg/version"
-	log "github.com/Sirupsen/logrus"
 	"github.com/vishvananda/netlink"
-	"github.com/cilium/cilium/common/logging"
 )
 
 func init() {
-	//TODO - need a way to send this to all logging endpoints that were configured with the daemon. Currently this just sends to syslog.
-	logging.SetupLogging([]string{"syslog"}, map[string]string{"syslog.level" : "debug"}, "cilium-net-cni")
+	logging.SetupLogging([]string{"syslog"}, map[string]string{"syslog.level": "debug"}, "cilium-net-cni")
 
 	// this ensures that main runs only on main thread (thread group leader).
 	// since namespace ops (unshare, setns) are done for a single thread, we

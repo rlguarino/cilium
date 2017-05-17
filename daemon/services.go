@@ -21,6 +21,7 @@ import (
 
 	"github.com/cilium/cilium/common"
 	"github.com/cilium/cilium/common/types"
+
 	log "github.com/Sirupsen/logrus"
 )
 

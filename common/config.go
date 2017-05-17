@@ -24,7 +24,7 @@ type Validator func(val string) (string, error)
 
 // MapOpts holds a map of values and a validation function.
 type MapOptions struct {
-	vals    map[string]string
+	vals      map[string]string
 	validator Validator
 }
 
@@ -35,11 +35,12 @@ type NamedMapOptions struct {
 	name string
 	MapOptions
 }
+
 // NewNamedMapOptions creates a reference to a new NamedMapOpts struct.
 func NewNamedMapOpts(name string, values *map[string]string, validator Validator) *NamedMapOptions {
 	fmt.Printf("NewNamedMapOpts: %v, %p\n", *values, values)
 	return &NamedMapOptions{
-		name:    name,
+		name:       name,
 		MapOptions: *NewMapOpts(*values, validator),
 	}
 }
@@ -51,7 +52,7 @@ func NewMapOpts(values map[string]string, validator Validator) *MapOptions {
 		values = make(map[string]string)
 	}
 	return &MapOptions{
-		vals:    values,
+		vals:      values,
 		validator: validator,
 	}
 }

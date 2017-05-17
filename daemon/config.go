@@ -25,10 +25,10 @@ import (
 	"github.com/cilium/cilium/pkg/labels"
 	"github.com/cilium/cilium/pkg/maps/lxcmap"
 	"github.com/cilium/cilium/pkg/option"
-	log "github.com/Sirupsen/logrus"
 
 	etcdAPI "github.com/coreos/etcd/clientv3"
 	consulAPI "github.com/hashicorp/consul/api"
+	log "github.com/Sirupsen/logrus"
 )
 
 var (

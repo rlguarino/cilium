@@ -27,6 +27,7 @@ import (
 
 	"github.com/cilium/cilium/pkg/bpf"
 	"github.com/cilium/cilium/pkg/bpfdebug"
+
 	log "github.com/Sirupsen/logrus"
 )
 

@@ -30,9 +30,9 @@ import (
 	"github.com/cilium/cilium/pkg/policy"
 	"github.com/cilium/cilium/pkg/policy/api"
 
+	log "github.com/Sirupsen/logrus"
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/op/go-logging"
-	log "github.com/Sirupsen/logrus"
 )
 
 // GetCachedLabelList returns the cached labels for the given identity.

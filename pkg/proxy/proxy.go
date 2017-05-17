@@ -28,8 +28,8 @@ import (
 
 	"github.com/cilium/cilium/pkg/policy"
 
-	"github.com/braintree/manners"
 	log "github.com/Sirupsen/logrus"
+	"github.com/braintree/manners"
 	"github.com/spf13/viper"
 	"github.com/vulcand/oxy/forward"
 	"github.com/vulcand/route"
