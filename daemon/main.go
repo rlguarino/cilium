@@ -81,8 +81,6 @@ var (
 	socketPath         string
 	v4Prefix           string
 	v6Address          string
-
-	foo string
 )
 
 var logOpts map[string]string = make(map[string]string)
@@ -264,11 +262,8 @@ func init() {
 	flags.StringVar(&bpfRoot, "bpf-root", "", "Path to mounted BPF filesystem")
 	flags.String("access-log", "", "Path to access log of all HTTP requests observed")
 	flags.Bool("version", false, "Print version information")
-
-	//logOpts = make(map[string]string)
 	flags.StringSliceVar(&loggers, "log-driver", []string{}, "logging endpoints to use")
-	flags.Var(common.NewNamedMapOpts("log-opts", &logOpts, nil), "log-opt", "log driver options for cilium")
-	//flags.StringVar(&foo, "log-opt", "foo", "bar")
+	flags.Var(common.NewNamedMapOptions("log-opts", &logOpts, nil), "log-opt", "log driver options for cilium")
 	viper.BindPFlags(flags)
 
 }

@@ -22,7 +22,7 @@ import (
 // Validator returns a validated string along with a possible error.
 type Validator func(val string) (string, error)
 
-// MapOpts holds a map of values and a validation function.
+// MapOptions holds a map of values and a validation function.
 type MapOptions struct {
 	vals      map[string]string
 	validator Validator
@@ -37,8 +37,8 @@ type NamedMapOptions struct {
 }
 
 // NewNamedMapOptions creates a reference to a new NamedMapOpts struct.
-func NewNamedMapOpts(name string, values *map[string]string, validator Validator) *NamedMapOptions {
-	fmt.Printf("NewNamedMapOpts: %v, %p\n", *values, values)
+func NewNamedMapOptions(name string, values *map[string]string, validator Validator) *NamedMapOptions {
+	fmt.Printf("NewNamedMapOptionss: %v, %p\n", *values, values)
 	return &NamedMapOptions{
 		name:       name,
 		MapOptions: *NewMapOpts(*values, validator),
