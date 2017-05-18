@@ -31,7 +31,6 @@ import (
 	"github.com/cilium/cilium/api/v1/server/restapi"
 	"github.com/cilium/cilium/common"
 	"github.com/cilium/cilium/common/addressing"
-	"github.com/cilium/cilium/common/logging"
 	"github.com/cilium/cilium/daemon/defaults"
 	"github.com/cilium/cilium/daemon/options"
 	"github.com/cilium/cilium/pkg/bpf"
@@ -354,7 +353,7 @@ func initConfig() {
 }
 
 func initEnv() {
-	logging.SetupLogging(loggers, logOpts, "cilium-agent")
+	common.SetupLogging(loggers, logOpts, "cilium-agent")
 
 	socketDir := path.Dir(socketPath)
 	if err := os.MkdirAll(socketDir, defaults.RuntimePathRights); err != nil {
