@@ -21,13 +21,13 @@ import (
 	"net"
 	"os"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/Sirupsen/logrus"
 	"github.com/Sirupsen/logrus/hooks/syslog"
 	"github.com/bshuster-repo/logrus-logstash-hook"
 	"github.com/evalphobia/logrus_fluent"
+	"regexp"
 )
 
 // syslogOpts is the set of supported options for syslog configuration.
@@ -238,9 +238,12 @@ func validateOpts(logDriver string, logOpts map[string]string, supportedOpts map
 func getLogDriverConfig(logDriver string, logOpts map[string]string) map[string]string {
 	keysToValidate := make(map[string]string)
 	for k, v := range logOpts {
-		if strings.Contains(k, logDriver) {
+		ok, err := regexp.MatchString(logDriver+".*", k)
+		if err != nil {
+			logrus.Fatal("error parsing key %q for log-driver %q", k, logDriver)
+		}
+		if ok{
 			keysToValidate[k] = v
-
 		}
 	}
 	return keysToValidate
