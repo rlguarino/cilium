@@ -45,31 +45,33 @@ func (ds *DaemonSuite) TestUpdateConsumerMap(c *C) {
 
 	rules := api.Rules{
 		{
-			EndpointSelector: api.EndpointSelector{lblBar},
+			EndpointSelector: api.NewESFromLabels(lblBar),
 			Ingress: []api.IngressRule{
 				{
 					FromEndpoints: []api.EndpointSelector{
-						{lblJoe}, {lblPete}, {lblFoo},
+						api.NewESFromLabels(lblJoe),
+						api.NewESFromLabels(lblPete),
+						api.NewESFromLabels(lblFoo),
 					},
 				},
 			},
 		},
 		{
-			EndpointSelector: api.EndpointSelector{lblQA},
+			EndpointSelector: api.NewESFromLabels(lblQA),
 			Ingress: []api.IngressRule{
 				{
 					FromRequires: []api.EndpointSelector{
-						{lblQA},
+						api.NewESFromLabels(lblQA),
 					},
 				},
 			},
 		},
 		{
-			EndpointSelector: api.EndpointSelector{lblProd},
+			EndpointSelector: api.NewESFromLabels(lblProd),
 			Ingress: []api.IngressRule{
 				{
 					FromRequires: []api.EndpointSelector{
-						{lblProd},
+						api.NewESFromLabels(lblProd),
 					},
 				},
 			},
@@ -79,23 +81,23 @@ func (ds *DaemonSuite) TestUpdateConsumerMap(c *C) {
 	err3 := ds.d.PolicyAdd(rules)
 	c.Assert(err3, Equals, nilAPIError)
 
-	qaBarLbls := labels.Labels{lblBar.Key: lblBar, lblQA.Key: lblQA}
+	qaBarLbls := labels.Labels{lblBar.GetExtendedKey(): lblBar, lblQA.GetExtendedKey(): lblQA}
 	qaBarSecLblsCtx, _, err := ds.d.CreateOrUpdateIdentity(qaBarLbls, "cc08ff400e355f736dce1c291a6a4007ab9f2d56d42e1f3630ba87b861d45307")
 	c.Assert(err, Equals, nil)
 
-	prodBarLbls := labels.Labels{lblBar.Key: lblBar, lblProd.Key: lblProd}
+	prodBarLbls := labels.Labels{lblBar.GetExtendedKey(): lblBar, lblProd.GetExtendedKey(): lblProd}
 	prodBarSecLblsCtx, _, err := ds.d.CreateOrUpdateIdentity(prodBarLbls, "cc08ff400e355f736dce1c291a6a4007ab9f2d56d42e1f3630ba87b861d45307")
 	c.Assert(err, Equals, nil)
 
-	qaFooLbls := labels.Labels{lblFoo.Key: lblFoo, lblQA.Key: lblQA}
+	qaFooLbls := labels.Labels{lblFoo.GetExtendedKey(): lblFoo, lblQA.GetExtendedKey(): lblQA}
 	qaFooSecLblsCtx, _, err := ds.d.CreateOrUpdateIdentity(qaFooLbls, "cc08ff400e355f736dce1c291a6a4007ab9f2d56d42e1f3630ba87b861d45307")
 	c.Assert(err, Equals, nil)
 
-	prodFooLbls := labels.Labels{lblFoo.Key: lblFoo, lblProd.Key: lblProd}
+	prodFooLbls := labels.Labels{lblFoo.GetExtendedKey(): lblFoo, lblProd.GetExtendedKey(): lblProd}
 	prodFooSecLblsCtx, _, err := ds.d.CreateOrUpdateIdentity(prodFooLbls, "cc08ff400e355f736dce1c291a6a4007ab9f2d56d42e1f3630ba87b861d45307")
 	c.Assert(err, Equals, nil)
 
-	prodFooJoeLbls := labels.Labels{lblFoo.Key: lblFoo, lblProd.Key: lblProd, lblJoe.Key: lblJoe}
+	prodFooJoeLbls := labels.Labels{lblFoo.GetExtendedKey(): lblFoo, lblProd.GetExtendedKey(): lblProd, lblJoe.GetExtendedKey(): lblJoe}
 	prodFooJoeSecLblsCtx, _, err := ds.d.CreateOrUpdateIdentity(prodFooJoeLbls, "cc08ff400e355f736dce1c291a6a4007ab9f2d56d42e1f3630ba87b861d45307")
 	c.Assert(err, Equals, nil)
 

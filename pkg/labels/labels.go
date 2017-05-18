@@ -248,6 +248,17 @@ func (l *Label) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+// GetExtendedKey returns the key of a label with the source encoded.
+func (l *Label) GetExtendedKey() string {
+	return common.BaseLabelSourceExtPrefix + l.Source + common.PathDelimiter + l.Key
+}
+
+// ParseExtendedKey returns the extended key of a label string.
+func ParseExtendedKey(str string) string {
+	l := ParseLabel(str)
+	return l.GetExtendedKey()
+}
+
 // Map2Labels transforms in the form: map[key(string)]value(string) into Labels. The
 // source argument will overwrite the source written in the key of the given map.
 // Example:
@@ -370,10 +381,17 @@ func parseSource(str string) (src, next string) {
 	sourceSplit := strings.SplitN(str, ":", 2)
 	if len(sourceSplit) != 2 {
 		next = sourceSplit[0]
-		if strings.HasPrefix(next, common.ReservedLabelKey) {
-			src = common.ReservedLabelSource
-			next = strings.TrimPrefix(next, common.ReservedLabelKey)
+		if strings.HasPrefix(next, common.BaseLabelSourceExtPrefix) {
+			next = strings.TrimPrefix(next, common.BaseLabelSourceExtPrefix)
+			sourceSplit = strings.SplitN(next, common.PathDelimiter, 2)
+			src = sourceSplit[0]
+			if len(sourceSplit) == 2 {
+				next = sourceSplit[1]
+			} else {
+				next = ""
+			}
 		}
+		// TODO add `any:` case
 	} else {
 		if sourceSplit[0] != "" {
 			src = sourceSplit[0]

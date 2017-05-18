@@ -44,6 +44,8 @@ var (
 		`//=/`:   NewLabel(`//=/`, "", common.CiliumLabelSource),
 		`%`:      NewLabel(`%`, `%ed`, common.CiliumLabelSource),
 	}
+
+	CiliumLabelSourceKeyPrefix = common.BaseLabelSourceExtPrefix + common.CiliumLabelSource + common.PathDelimiter
 )
 
 func (s *LabelsSuite) TestSHA256Sum(c *C) {
@@ -114,7 +116,7 @@ func (s *LabelsSuite) TestParseLabel(c *C) {
 		{"6foo==", NewLabel("6foo", "=", common.CiliumLabelSource)},
 		{"7foo=bar", NewLabel("7foo", "bar", common.CiliumLabelSource)},
 		{"k8s:foo=bar:", NewLabel("foo", "bar:", "k8s")},
-		{common.ReservedLabelKey + "=host", NewLabel("host", "", common.ReservedLabelSource)},
+		{common.ReservedLabelSourceKeyPrefix + "host", NewLabel("host", "", common.ReservedLabelSource)},
 	}
 	for _, test := range tests {
 		lbl := ParseLabel(test.str)
@@ -180,4 +182,32 @@ func (s *LabelsSuite) TestLabelSliceSHA256Sum(c *C) {
 	sha256sum, err := LabelSliceSHA256Sum(labels)
 	c.Assert(err, IsNil)
 	c.Assert(sha256sum, DeepEquals, "180d22655dec0e78f62c3e4ac17f5994baedbdfc5c882cbbd668e2628c44f320")
+}
+
+func (s *LabelsSuite) TestLabelParseKey(c *C) {
+	tests := []struct {
+		str string
+		out string
+	}{
+		{"source1:key1=value1", common.BaseLabelSourceExtPrefix + "source1.key1"},
+		{"cilium.src.source1.key1=value1", common.BaseLabelSourceExtPrefix + "source1.key1"},
+		{"source1:key1", common.BaseLabelSourceExtPrefix + "source1.key1"},
+		{"source1:key1==value1", common.BaseLabelSourceExtPrefix + "source1.key1"},
+		{"source::key1=value1", common.BaseLabelSourceExtPrefix + "source.:key1"},
+		{"4blah=:foo=", common.BaseLabelSourceExtPrefix + "4blah=.foo"},
+		{"5blah::foo=", common.BaseLabelSourceExtPrefix + "5blah.:foo"},
+		{"1foo", CiliumLabelSourceKeyPrefix + "1foo"},
+		{":2foo", CiliumLabelSourceKeyPrefix + "2foo"},
+		{":3foo=", CiliumLabelSourceKeyPrefix + "3foo"},
+		{"6foo==", CiliumLabelSourceKeyPrefix + "6foo"},
+		{"7foo=bar", CiliumLabelSourceKeyPrefix + "7foo"},
+		{"cilium.src.cilium.key1=value1", CiliumLabelSourceKeyPrefix + "key1"},
+		{"key1=value1", CiliumLabelSourceKeyPrefix + "key1"},
+		{"value1", CiliumLabelSourceKeyPrefix + "value1"},
+		{"$world=value1", common.ReservedLabelSourceKeyPrefix + "world"},
+	}
+	for _, test := range tests {
+		lbl := ParseExtendedKey(test.str)
+		c.Assert(lbl, DeepEquals, test.out)
+	}
 }
