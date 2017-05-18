@@ -31,19 +31,19 @@ import (
 )
 
 // syslogOpts is the set of supported options for syslog configuration.
-var syslogOpts map[string]bool = map[string]bool{
+var syslogOpts = map[string]bool{
 	"syslog.level": true,
 }
 
 // fluentDOpts is the set of supported options for fluentD configuration.
-var fluentDOpts map[string]bool = map[string]bool{
+var fluentDOpts = map[string]bool{
 	"fluentd.address": true,
 	"fluentd.tag":     true,
 	"fluentd.level":   true,
 }
 
 // logstashOpts is the set of supported options for logstash configuration.
-var logstashOpts map[string]bool = map[string]bool{
+var logstashOpts = map[string]bool{
 	"logstash.address":  true,
 	"logstash.level":    true,
 	"logstash.protocol": true,
@@ -82,6 +82,8 @@ func setFireLevels(level logrus.Level) []logrus.Level {
 
 // SetupLogging sets up each logging service provided in loggers and configures each logger with the provided logOpts.
 func SetupLogging(loggers []string, logOpts map[string]string, tag string) error {
+	setupFormatter()
+
 	// Always setup syslog.
 	valuesToValidate := getLogDriverConfig("syslog", logOpts)
 	err := validateOpts("syslog", valuesToValidate, syslogOpts)
@@ -148,7 +150,7 @@ func setupSyslog(logOpts map[string]string, tag string) {
 }
 
 // setupFormatter sets up the text formatting for logs output by logrus.
-func SetupFormatter() {
+func setupFormatter() {
 	fileFormat := new(logrus.TextFormatter)
 	fileFormat.DisableColors = true
 	switch os.Getenv("INITSYSTEM") {

@@ -354,7 +354,6 @@ func initConfig() {
 }
 
 func initEnv() {
-	logging.SetupFormatter()
 	logging.SetupLogging(loggers, logOpts, "cilium-agent")
 
 	socketDir := path.Dir(socketPath)

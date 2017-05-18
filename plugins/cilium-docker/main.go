@@ -76,7 +76,6 @@ func init() {
 }
 
 func initConfig() {
-	logging.SetupFormatter()
 	if debug {
 		logging.SetupLogging([]string{"syslog"}, map[string]string{"syslog.level": "debug"}, "cilium-docker")
 	} else {

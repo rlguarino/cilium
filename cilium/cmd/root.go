@@ -95,8 +95,6 @@ func initConfig() {
 		fmt.Println("Using config file:", viper.ConfigFileUsed())
 	}
 
-	logging.SetupFormatter()
-
 	if viper.GetBool("debug") {
 		logging.SetupLogging([]string{"syslog"}, map[string]string{"syslog.level": "debug"}, "cilium-cmd")
 	} else {
